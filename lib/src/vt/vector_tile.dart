@@ -23,7 +23,7 @@ class VectorTile {
   });
 
   /// decodes the given bytes (`.mvt`/`.pbf`) to a [VectorTile]
-  factory VectorTile.fromBytes({required Uint8List bytes}) {
+  factory VectorTile.fromBytes(Uint8List bytes) {
     final tile = raw.VectorTile.fromBuffer(bytes);
     List<Layer> layers = tile.layers.map(_decodeLayer).toList();
     return VectorTile(layers: layers);

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
@@ -73,25 +75,11 @@ class _VectorMapPageState extends State<VectorMapPage> {
                   setState(() {});
                 }
               },
-              child: Stack(
-                children: [
-                  Map(
-                    controller: controller,
-                    builder: (context, x, y, z) {
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            border: Border.all(width: 2),
-                          ),
-                          child: Text('z=$z, x=$x, y=$y'),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+              child: Map(
+                controller: controller,
+                builder: (context, x, y, z) {
+                  return Tile();
+                },
               ),
             ),
           );
@@ -104,4 +92,68 @@ class _VectorMapPageState extends State<VectorMapPage> {
       ),
     );
   }
+}
+
+class Tile extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _TileState();
+  }
+}
+
+class _TileState extends State<Tile> {
+  VectorTile? tile;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _load();
+  }
+
+  void _load() async {
+    final data =
+        await DefaultAssetBundle.of(context).load('assets/sample_tile.pbf');
+
+    final bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+    this.tile = VectorTile.fromBytes(bytes);
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (tile == null) {
+      return CircularProgressIndicator();
+    }
+    return Container(
+        decoration: BoxDecoration(color: Colors.black45),
+        child: CustomPaint(
+          size: Size(512, 512),
+          painter: TilePainter(tile!, scale: 2),
+        ));
+  }
+}
+
+class TilePainter extends CustomPainter {
+  final int scale;
+  final VectorTile tile;
+  final Renderer _renderer = Renderer(theme: MapTheme.light());
+  TilePainter(this.tile, {required this.scale});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.scale(scale.toDouble(), scale.toDouble());
+    _renderer.render(canvas, tile,
+        zoomScaleFactor: pow(2, scale).toDouble(), zoom: 15);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
