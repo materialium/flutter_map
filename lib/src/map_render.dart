@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:map/src/vt/vector_tile.dart';
+import 'vtw/renderer.dart';
+import 'vtw/themes/theme.dart';
+
+final _renderer = Renderer(theme: MapTheme.light());
 
 /// Render object widget with a [RenderVectorTile] inside.
 class VectorTileRenderObjectWidget extends SingleChildRenderObjectWidget {
@@ -51,9 +55,28 @@ class RenderVectorTile extends RenderBox
   void handleEvent(PointerEvent event, BoxHitTestEntry entry) {}
 
   @override
+  void performLayout() {
+    final BoxConstraints constraints = this.constraints;
+    size = constraints.biggest;
+
+    if (child != null) {
+      child!.layout(BoxConstraints.tight(size), parentUsesSize: false);
+    }
+  }
+
+  @override
   void paint(PaintingContext context, Offset offset) {
     if (child != null) {
       context.paintChild(child!, offset);
+    }
+
+    if (tile != null) {
+      final canvas = context.canvas;
+
+      //canvas.save();
+      //canvas.scale(scale.toDouble(), scale.toDouble());
+      _renderer.render(canvas, tile!, zoomScaleFactor: 4, zoom: 15, size: size);
+      //canvas.restore();
     }
   }
 }

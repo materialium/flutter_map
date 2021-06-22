@@ -142,16 +142,13 @@ class _TileState extends State<Tile> {
 class TilePainter extends CustomPainter {
   final int scale;
   final VectorTile tile;
-  final Renderer _renderer = Renderer(theme: MapTheme.light());
+  final _renderer = Renderer(theme: MapTheme.light());
   TilePainter(this.tile, {required this.scale});
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.save();
-    canvas.scale(scale.toDouble(), scale.toDouble());
     _renderer.render(canvas, tile,
         zoomScaleFactor: pow(2, scale).toDouble(), zoom: 15, size: size);
-    canvas.restore();
   }
 
   @override

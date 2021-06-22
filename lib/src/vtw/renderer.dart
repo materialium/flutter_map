@@ -21,11 +21,14 @@ class Renderer {
   ///        no scaling is being applied.
   /// [zoom] the current zoom level, which is used to filter theme layers
   ///        via `minzoom` and `maxzoom`. Value must be >= 0 and <= 24
-  void render(Canvas canvas, VectorTile tile,
-      {Rect? clip,
-      required double zoomScaleFactor,
-      required double zoom,
-      required Size size}) {
+  void render(
+    Canvas canvas,
+    VectorTile tile, {
+    Rect? clip,
+    required double zoomScaleFactor,
+    required double zoom,
+    required Size size,
+  }) {
     canvas.save();
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     final tileClip = clip ?? Rect.fromLTWH(0, 0, size.width, size.height);
