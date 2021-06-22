@@ -49,7 +49,10 @@ class PaintStyle {
 }
 
 class PaintFactory {
-  PaintStyle? create(String id, PaintingStyle style, String prefix, paint,
+  PaintFactory._();
+
+  static PaintStyle? create(
+      String id, PaintingStyle style, String prefix, paint,
       {double? defaultStrokeWidth = 1.0}) {
     if (paint == null) {
       return null;
@@ -68,18 +71,18 @@ class PaintFactory {
       color: color,
     );
   }
+}
 
-  DoubleZoomFunction _toDouble(doubleSpec) {
-    if (doubleSpec is num) {
-      final value = doubleSpec.toDouble();
-      return (zoom) => value;
-    }
-    if (doubleSpec is Map) {
-      final model = DoubleFunctionModelFactory().create(doubleSpec);
-      if (model != null) {
-        return (zoom) => DoubleThemeFunction().exponential(model, zoom);
-      }
-    }
-    return (_) => null;
+DoubleZoomFunction _toDouble(doubleSpec) {
+  if (doubleSpec is num) {
+    final value = doubleSpec.toDouble();
+    return (zoom) => value;
   }
+  if (doubleSpec is Map) {
+    final model = DoubleFunctionModelFactory().create(doubleSpec);
+    if (model != null) {
+      return (zoom) => DoubleThemeFunction().exponential(model, zoom);
+    }
+  }
+  return (_) => null;
 }

@@ -11,10 +11,9 @@ class VectorTileRenderObjectWidget extends SingleChildRenderObjectWidget {
   final VectorTile tile;
 
   const VectorTileRenderObjectWidget({
-    required Widget child,
     required this.tile,
     Key? key,
-  }) : super(key: key, child: child);
+  }) : super(key: key);
 
   @override
   RenderObject createRenderObject(BuildContext context) {

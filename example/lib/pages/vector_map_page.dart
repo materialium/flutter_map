@@ -102,7 +102,7 @@ class Tile extends StatefulWidget {
 }
 
 class _TileState extends State<Tile> {
-  VectorTile? tile;
+  static VectorTile? tile;
 
   @override
   void initState() {
@@ -118,7 +118,7 @@ class _TileState extends State<Tile> {
     final bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-    this.tile = VectorTile.fromBytes(bytes);
+    tile = VectorTile.fromBytes(bytes);
 
     if (mounted) {
       setState(() {});
@@ -130,19 +130,18 @@ class _TileState extends State<Tile> {
     if (tile == null) {
       return CircularProgressIndicator();
     }
-    return Container(
-        decoration: BoxDecoration(color: Colors.black45),
-        child: CustomPaint(
-          size: Size(512, 512),
-          painter: TilePainter(tile!, scale: 2),
-        ));
+
+    return CustomPaint(
+      //size: Size(512, 512),
+      painter: TilePainter(tile!, scale: 2),
+    );
   }
 }
 
 class TilePainter extends CustomPainter {
   final int scale;
   final VectorTile tile;
-  final _renderer = Renderer(theme: MapTheme.light());
+  static final _renderer = Renderer(theme: MapTheme.light());
   TilePainter(this.tile, {required this.scale});
 
   @override

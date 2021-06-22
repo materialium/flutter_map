@@ -24,20 +24,16 @@ class Renderer {
   void render(
     Canvas canvas,
     VectorTile tile, {
-    Rect? clip,
     required double zoomScaleFactor,
     required double zoom,
     required Size size,
   }) {
-    canvas.save();
-    canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
-    final tileClip = clip ?? Rect.fromLTWH(0, 0, size.width, size.height);
+    final tileClip = Rect.fromLTWH(0, 0, size.width, size.height);
     final context =
         Context(canvas, featureRenderer, tile, zoomScaleFactor, zoom, tileClip);
     final effectiveTheme = theme.atZoom(zoom);
     effectiveTheme.layers.forEach((themeLayer) {
       themeLayer.render(context, size);
     });
-    canvas.restore();
   }
 }
