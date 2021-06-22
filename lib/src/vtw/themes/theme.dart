@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../context.dart';
 import 'light_theme.dart';
 import 'theme_reader.dart';
@@ -35,5 +37,5 @@ abstract class ThemeLayer {
     required this.maxzoom,
   });
 
-  void render(Context context);
+  void render(Context context, Size size);
 }

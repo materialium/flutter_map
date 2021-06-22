@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:map/map.dart';
-import 'constants.dart';
 
 import 'context.dart';
 import 'features/feature_renderer.dart';
@@ -23,17 +22,18 @@ class Renderer {
   /// [zoom] the current zoom level, which is used to filter theme layers
   ///        via `minzoom` and `maxzoom`. Value must be >= 0 and <= 24
   void render(Canvas canvas, VectorTile tile,
-      {Rect? clip, required double zoomScaleFactor, required double zoom}) {
+      {Rect? clip,
+      required double zoomScaleFactor,
+      required double zoom,
+      required Size size}) {
     canvas.save();
-    canvas.clipRect(
-        Rect.fromLTRB(0, 0, tileSize.toDouble(), tileSize.toDouble()));
-    final tileClip =
-        clip ?? Rect.fromLTWH(0, 0, tileSize.toDouble(), tileSize.toDouble());
+    canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
+    final tileClip = clip ?? Rect.fromLTWH(0, 0, size.width, size.height);
     final context =
         Context(canvas, featureRenderer, tile, zoomScaleFactor, zoom, tileClip);
     final effectiveTheme = theme.atZoom(zoom);
     effectiveTheme.layers.forEach((themeLayer) {
-      themeLayer.render(context);
+      themeLayer.render(context, size);
     });
     canvas.restore();
   }

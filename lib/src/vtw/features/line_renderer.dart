@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:map/map.dart';
 
-import '../constants.dart';
 import '../context.dart';
 import '../themes/style.dart';
 import '../themes/theme.dart';
@@ -12,7 +11,7 @@ import 'feature_renderer.dart';
 class LineRenderer extends FeatureRenderer {
   @override
   void render(Context context, ThemeLayerType layerType, Style style,
-      Layer layer, Feature feature) {
+      Layer layer, Feature feature, Size size) {
     if (style.linePaint == null) {
       // logger.warn(() =>
       //     'line does not have a line paint for vector tile layer ${layer.name}');
@@ -26,8 +25,8 @@ class LineRenderer extends FeatureRenderer {
           if (point.length < 2) {
             throw Exception('invalid point ${point.length}');
           }
-          final x = point[0] * tileSize;
-          final y = point[1] * tileSize;
+          final x = point[0] * size.width;
+          final y = point[1] * size.height;
           if (index == 0) {
             path.moveTo(x, y);
           } else {

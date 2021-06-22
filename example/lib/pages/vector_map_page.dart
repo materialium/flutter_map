@@ -150,7 +150,7 @@ class TilePainter extends CustomPainter {
     canvas.save();
     canvas.scale(scale.toDouble(), scale.toDouble());
     _renderer.render(canvas, tile,
-        zoomScaleFactor: pow(2, scale).toDouble(), zoom: 15);
+        zoomScaleFactor: pow(2, scale).toDouble(), zoom: 15, size: size);
     canvas.restore();
   }
 

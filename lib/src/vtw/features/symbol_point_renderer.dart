@@ -9,14 +9,14 @@ import '../vector_tile_extensions.dart';
 import 'feature_renderer.dart';
 
 import '../context.dart';
-import '../constants.dart';
+
 import '../themes/style.dart';
 import '../themes/theme.dart';
 
 class SymbolPointRenderer extends FeatureRenderer {
   @override
   void render(Context context, ThemeLayerType layerType, Style style,
-      map.Layer layer, map.Feature feature) {
+      map.Layer layer, map.Feature feature, Size size) {
     final textPaint = style.textPaint;
     final textLayout = style.textLayout;
     if (textPaint == null || textLayout == null) {
@@ -35,8 +35,8 @@ class SymbolPointRenderer extends FeatureRenderer {
             if (point.length < 2) {
               throw Exception('invalid point ${point.length}');
             }
-            final x = point[0] * tileSize;
-            final y = point[1] * tileSize;
+            final x = point[0] * size.width;
+            final y = point[1] * size.height;
             final box = textRenderer.labelBox(Offset(x, y));
             if (box != null && !context.labelSpace.isOccupied(box)) {
               if (context.tileClip.overlaps(box)) {

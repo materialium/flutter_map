@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:map/map.dart';
 import 'text_renderer.dart';
 
-import '../constants.dart';
 import '../context.dart';
 import '../themes/style.dart';
 import '../themes/theme.dart';
@@ -15,7 +14,7 @@ import 'text_abbreviator.dart';
 class SymbolLineRenderer extends FeatureRenderer {
   @override
   void render(Context context, ThemeLayerType layerType, Style style,
-      Layer layer, Feature feature) {
+      Layer layer, Feature feature, Size size) {
     final textPaint = style.textPaint;
     final textLayout = style.textLayout;
     if (textPaint == null || textLayout == null) {
@@ -34,8 +33,8 @@ class SymbolLineRenderer extends FeatureRenderer {
             if (point.length < 2) {
               throw Exception('invalid point ${point.length}');
             }
-            final x = point[0] * tileSize;
-            final y = point[1] * tileSize;
+            final x = point[0] * size.width;
+            final y = point[1] * size.height;
             if (index == 0) {
               path.moveTo(x, y);
             } else {

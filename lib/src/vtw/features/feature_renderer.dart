@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:map/map.dart' as map;
 import '../../vt/vector_tile.dart';
 import '../themes/theme.dart';
@@ -11,7 +13,7 @@ import '../vector_tile_extensions.dart';
 
 abstract class FeatureRenderer {
   void render(Context context, ThemeLayerType layerType, Style style,
-      Layer layer, Feature feature);
+      Layer layer, Feature feature, Size size);
 }
 
 class FeatureDispatcher extends FeatureRenderer {
@@ -22,8 +24,9 @@ class FeatureDispatcher extends FeatureRenderer {
       : typeToRenderer = createDispatchMapping(),
         symbolTypeToRenderer = createSymbolDispatchMapping();
 
+  @override
   void render(Context context, ThemeLayerType layerType, Style style,
-      Layer layer, Feature feature) {
+      Layer layer, Feature feature, Size size) {
     final type = feature.type;
     if (type != null) {
       final rendererMapping = layerType == ThemeLayerType.symbol
@@ -34,7 +37,7 @@ class FeatureDispatcher extends FeatureRenderer {
         // logger.warn(
         //     () => 'layer type $layerType feature $type is not implemented');
       } else {
-        delegate.render(context, layerType, style, layer, feature);
+        delegate.render(context, layerType, style, layer, feature, size);
       }
     }
   }

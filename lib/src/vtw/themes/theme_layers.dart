@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:map/map.dart';
 
 import 'selector.dart';
-
-import '../constants.dart';
 import '../context.dart';
 import 'style.dart';
 import 'theme.dart';
@@ -21,10 +19,11 @@ class DefaultLayer extends ThemeLayer {
       : super(id, type, minzoom: minzoom, maxzoom: maxzoom);
 
   @override
-  void render(Context context) {
+  void render(Context context, Size size) {
     selector.select(context.tile.layers).forEach((layer) {
       selector.features(layer.features).forEach((feature) {
-        context.featureRenderer.render(context, type, style, layer, feature);
+        context.featureRenderer
+            .render(context, type, style, layer, feature, size);
         _releaseMemory(feature);
       });
     });
@@ -42,12 +41,12 @@ class BackgroundLayer extends ThemeLayer {
       : super(id, ThemeLayerType.background, minzoom: 0, maxzoom: 24);
 
   @override
-  void render(Context context) {
+  void render(Context context, Size size) {
     //context.logger.log(() => 'rendering $id');
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..color = fillColor;
-    context.canvas.drawRect(
-        Rect.fromLTRB(0, 0, tileSize.toDouble(), tileSize.toDouble()), paint);
+    context.canvas
+        .drawRect(Rect.fromLTRB(0, 0, size.width, size.height), paint);
   }
 }
